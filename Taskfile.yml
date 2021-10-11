@@ -1,0 +1,18 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  install-all:
+    desc: Install all development tools
+    cmds:
+      - task install-all -o prefixed -t vparts/install_yd_base_tools.tasks.yml 
+      - task install-all -o prefixed -t vparts/install_conda_mini.tasks.yml 
