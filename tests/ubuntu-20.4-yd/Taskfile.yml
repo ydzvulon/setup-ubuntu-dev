@@ -42,5 +42,6 @@ tasks:
   run-test:
     desc: _
     cmds:
+      - task: regen
       - task: build
 

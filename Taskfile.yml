@@ -9,21 +9,26 @@ tasks:
     silent: true
 
   install-all:
+    desc: _
+    cmds:
+      - task: install-all-seq2
+
+  install-all-par:
     desc: Install all development tools
+    silent: true
+    env:
+      to_docker: '{{.to_docker}}'
     deps:
-      - task: install-yd-base-tools
-      - task: install-conda-mini
-      - task: install-docker
+      - task: install_part2 
+        vars: {part_path: vparts/install_yd_base_tools.tasks.yml}
+      - task: install_part2 
+        vars: {part_path: vparts/install_conda_mini.tasks.yml }
+      - task: install_part2 
+        vars: {part_path: vparts/install_docker_base.tasks.yml }
+      - task: install_part2 
+        vars: {part_path: vparts/install_yd_base_zsh.tasks.yml }
     cmds:
       - echo "Successfully Installed ALL"
-
-  install-all-seq:
-    desc: Install all development tools
-    cmds:
-      - task -o prefixed install-yd-base-tools
-      - task -o prefixed install-conda-mini
-      - task -o prefixed install-docker
-      - task -o prefixed install-zsh
 
   install-all-seq2:
     desc: Install all development tools
@@ -60,3 +65,8 @@ tasks:
     desc: _
     cmds:
      - to_docker=1 task install-all-seq2 2>/dev/null
+
+  test:
+    desc: _
+    cmds:
+      - task run-test -d tests/ubuntu-20.4-yd
