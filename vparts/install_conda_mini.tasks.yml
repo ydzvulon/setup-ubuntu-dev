@@ -67,7 +67,8 @@ tasks:
 
   install-miniconda-local.test-install:
     vars:
-      cmd: 'echo bash --login -c "conda --version"'
+      cmd: 'echo bash'
+      # cmd: 'echo bash --login -c "conda --version"'
     <<: *ref_one_cmd
   
   ze-run-cmd:
