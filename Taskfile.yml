@@ -2,14 +2,20 @@
 
 version: '3'
 
-vars:
-  GREETING: Hello, World!
-
 tasks:
   default:
     cmds:
       - task -l
     silent: true
+
+  install-all:
+    desc: Install all development tools
+    deps:
+      - task: install-yd-base-tools
+      - task: install-conda-mini
+      - task: install-docker
+    cmds:
+      - echo "Successfully Installed ALL"
 
   install-yd-base-tools:
     desc: install cli mininum
@@ -23,12 +29,9 @@ tasks:
     desc: install cli mininum
     cmds: [task install-all -o prefixed -t vparts/install_docker_base.tasks.yml ]
 
+  install-zsh:
+    desc: install cli mininum
+    cmds: [task install-all -o prefixed -t vparts/install_yd_base_zsh.tasks.yml ]
 
-  install-all:
-    desc: Install all development tools
-    deps:
-      - task: install-yd-base-tools
-      - task: install-conda-mini
-      - task: install-docker
-    cmds:
-      - echo "Successfully Installed ALL"
+
+

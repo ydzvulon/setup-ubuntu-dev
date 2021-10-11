@@ -29,7 +29,7 @@ tasks:
       - task: install-miniconda-local.sync-remote-to-local
       - task: install-miniconda-local.install-silent
       - task: install-miniconda-local.init-bash
-      - task: install-miniconda-local.test-install
+      # - task: install-miniconda-local.test-install
 
   ref_one_cmd: &ref_one_cmd
     _desc: "helper task to define steps"
