@@ -85,5 +85,6 @@ tasks:
         {{.__cmd_init__}}
         {{.cmd}}
         {{.__cmd_over__}}
+    prefix: "[run-cmd:{{.name}}]"
   
 

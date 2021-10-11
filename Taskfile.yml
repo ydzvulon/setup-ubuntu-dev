@@ -17,21 +17,46 @@ tasks:
     cmds:
       - echo "Successfully Installed ALL"
 
-  install-yd-base-tools:
-    desc: install cli mininum
-    cmds: [task install-all -o prefixed -t vparts/install_yd_base_tools.tasks.yml]
+  install-all-seq:
+    desc: Install all development tools
+    cmds:
+      - task -o prefixed install-yd-base-tools
+      - task -o prefixed install-conda-mini
+      - task -o prefixed install-docker
+      - task -o prefixed install-zsh
 
-  install-conda-mini:
-    desc: install cli mininum
-    cmds: [task install-all -o prefixed -t vparts/install_conda_mini.tasks.yml ]
+  install-all-seq2:
+    desc: Install all development tools
+    vars:
+      silent_opt: '{{if .to_docker}}--silent{{end}}'
+    env:
+      to_docker: '{{.to_docker}}'
+    cmds:
+      - task {{.silent_opt}} install_part2 part_path=vparts/install_yd_base_tools.tasks.yml
+      - task {{.silent_opt}} install_part2 part_path=vparts/install_conda_mini.tasks.yml
+      - task {{.silent_opt}} install_part2 part_path=vparts/install_docker_base.tasks.yml
+      - task {{.silent_opt}} install_part2 part_path=vparts/install_yd_base_zsh.tasks.yml
 
-  install-docker:
-    desc: install cli mininum
-    cmds: [task install-all -o prefixed -t vparts/install_docker_base.tasks.yml ]
+  install_part2:
+    desc: '{{.TASK}} install logical part block from file.'
+    vars:
+      __args: |-
+          part_path: "path to installer"
+      _docker_repr: |-
+        COPY {{.part_path}} /src/{{.part_path}}
+        RUN  task install-all -o prefixed -t /src/{{.part_path}}
+      _tasker_repr: task install-all -o prefixed -t {{.part_path}}
+    cmds: 
+    - |-
+      if [[ "$to_docker" != "" ]]; then
+      echo '
+      {{._docker_repr}}
+      '
+      else
+        {{._tasker_repr}}
+      fi
 
-  install-zsh:
-    desc: install cli mininum
-    cmds: [task install-all -o prefixed -t vparts/install_yd_base_zsh.tasks.yml ]
-
-
-
+  to_dockerfile:
+    desc: _
+    cmds:
+     - to_docker=1 task install-all-seq2 2>/dev/null

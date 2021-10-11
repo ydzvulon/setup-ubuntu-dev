@@ -11,9 +11,36 @@ tasks:
     cmds:
       - task -l
     silent: true
+
+  regen:
+    desc: _
+    vars:
+      _install_parts: "$(to_docker=1 task -d ../.. install-all-seq2 2>/dev/null)"
+    cmds:
+      - |-
+        export to_docker=1
+        export DLR='$'
+        cat <<EOF > Dockerfile
+        FROM ubuntu:20.04
+        ENV IN_DOCKER 1
+        RUN apt update && apt install -y git sudo curl
+
+        COPY vparts/install_os_base_tools.sh /src/vparts/install_os_base_tools.sh
+        RUN  bash /src/vparts/install_os_base_tools.sh
+
+        RUN sh -c "$DLR(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+        
+        {{._install_parts}}
+        
+        EOF
   
   build:
     desc: _
     cmds:
-      - docker build -t {{.DIMAGE}} .
+      - docker build -f Dockerfile -t {{.DIMAGE}} ../..
+
+  run-test:
+    desc: _
+    cmds:
+      - task: build
 
