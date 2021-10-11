@@ -8,11 +8,27 @@ vars:
 tasks:
   default:
     cmds:
-      - echo "{{.GREETING}}"
+      - task -l
     silent: true
+
+  install-yd-base-tools:
+    desc: install cli mininum
+    cmds: [task install-all -o prefixed -t vparts/install_yd_base_tools.tasks.yml]
+
+  install-conda-mini:
+    desc: install cli mininum
+    cmds: [task install-all -o prefixed -t vparts/install_conda_mini.tasks.yml ]
+
+  install-docker:
+    desc: install cli mininum
+    cmds: [task install-all -o prefixed -t vparts/install_docker_base.tasks.yml ]
+
 
   install-all:
     desc: Install all development tools
+    deps:
+      - task: install-yd-base-tools
+      - task: install-conda-mini
+      - task: install-docker
     cmds:
-      - task install-all -o prefixed -t vparts/install_yd_base_tools.tasks.yml 
-      - task install-all -o prefixed -t vparts/install_conda_mini.tasks.yml 
+      - echo "Successfully Installed ALL"
