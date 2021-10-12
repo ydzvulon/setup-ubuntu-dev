@@ -41,12 +41,13 @@ tasks:
       - chmod +x {{.name}}
       - |-
         _SUDO=$(which sudo &> /dev/null && echo "sudo" || echo "")
-        {{._SUDO}} mv {{.name}} {{.usr_local_bin}}
+        $_SUDO mv {{.name}} {{.usr_local_bin}}
       # support alias (two names)
       - |-
+        _SUDO=$(which sudo &> /dev/null && echo "sudo" || echo "")
         if [[ "{{.alias}}" != "" ]]; then
           pushd {{.usr_local_bin}}
-            sudo cp {{.name}} {{.alias}}
+            $_SUDO cp {{.name}} {{.alias}}
           popd
         fi
       - |-
