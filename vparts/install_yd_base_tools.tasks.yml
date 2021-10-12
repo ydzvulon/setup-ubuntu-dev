@@ -30,7 +30,7 @@ tasks:
     cmds:
       - |-
         {{.intro}}
-      - wget -N {{.url}} -O {{.local_path}}
+      - wget --no-check-certificate -N {{.url}} -O {{.local_path}}
       - |-
         if [[ "{{.ext}}" == "zip" ]]; then
           unzip -o {{.local_path}}
